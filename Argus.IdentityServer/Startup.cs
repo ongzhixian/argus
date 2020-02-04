@@ -30,7 +30,9 @@ namespace Argus.IdentityServer
             var builder = services.AddIdentityServer()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApis())
-                .AddInMemoryClients(Config.GetClients());
+                .AddInMemoryClients(Config.GetClients())
+                .AddTestUsers(Config.GetUsers());
+                ;
 
             if (this.environment.IsDevelopment())
             {
@@ -40,6 +42,13 @@ namespace Argus.IdentityServer
             {
                 throw new Exception("need to configure key material");
             }
+
+            // Uncomment to activate MVC framework; needed only if we are using OpenID Connect
+            // We do not want to use OpenID Connect by default because we want the idp to be lightweight
+            // (and also we do not want to pack the necessary assets (controllers, views, wwwroot, ...etc.) by default)
+            // TODO: Setup a `OpenIdConnect` branch to demonstrate this use case.
+            // services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);                
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +59,7 @@ namespace Argus.IdentityServer
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                //Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true; 
             }
 
             app.UseIdentityServer();
@@ -60,6 +70,14 @@ namespace Argus.IdentityServer
             // app.Run(async (context) =>
             // {
             //     await context.Response.WriteAsync(runDateMessage);
+            // });
+
+            // Uncomment to activate MVC framework; needed only if we are using OpenID Connect
+            // app.UseMvc(routes =>
+            // {
+            //     routes.MapRoute(
+            //         name: "default",
+            //         template: "{controller=Home}/{action=Index}/{id?}");
             // });
         }
     }
