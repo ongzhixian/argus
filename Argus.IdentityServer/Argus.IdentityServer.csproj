@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
     <PackageReference Include="IdentityServer4" Version="2.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <!-- ZX COMMENT START: Pretty sure we can do without the following line -->
@@ -18,7 +19,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
-
 
 </Project>

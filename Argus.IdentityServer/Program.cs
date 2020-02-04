@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Argus.IdentityServer
 {
@@ -26,7 +27,6 @@ namespace Argus.IdentityServer
                 .AddEnvironmentVariables()
                 .Build();
 
-
             // IWebHost host = CreateWebHostBuilder(config).Build();
             // host.Run();
 
@@ -37,6 +37,14 @@ namespace Argus.IdentityServer
             new WebHostBuilder()
             .UseConfiguration(config)
             .UseKestrel()
-            .UseStartup<Startup>();
+            .UseStartup<Startup>()
+            .UseSerilog((context, configuration) => 
+            {
+                // context          // WebHostbuilderContext
+                // configuration    // LoggerConfiguration
+                
+                configuration.ReadFrom.Configuration(config);
+                //.CreateLogger(); // ZX: Think `UseSerilog` will implicitly call CreateLogger() already; comment out as multiple calls is fatal.
+            });
     }
 }
